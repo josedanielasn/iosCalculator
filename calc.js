@@ -88,17 +88,17 @@ keys.addEventListener('click', e => {
       const operator = calculator.dataset.operator
       const secondValue = displayedNum
 
-      if (firstValue && 
-          operator && 
-          previousKeyType !== 'operator' &&
-          previousKeyType !== 'calculate'
-         ) {
-        const calcValue = calculate(firstValue, operator, secondValue)
-        display.textContent = calcValue
-        calculator.dataset.firstValue = calcValue  // Update calculated value as firstValue
-      } else {
-        // If there are no calculations, set displayedNum as the firstValue
-        calculator.dataset.firstValue = displayedNum
+        if (firstValue && 
+            operator && 
+            previousKeyType !== 'operator' &&
+            previousKeyType !== 'calculate'
+          ) {
+          const calcValue = calculate(firstValue, operator, secondValue)
+          display.textContent = calcValue
+          calculator.dataset.firstValue = calcValue  // Update calculated value as firstValue
+        } else {
+          // If there are no calculations, set displayedNum as the firstValue
+          calculator.dataset.firstValue = displayedNum
       }
       
       key.classList.add('is-depressed') // I'm not sure if this should be applied to previous ones as well
@@ -106,11 +106,6 @@ keys.addEventListener('click', e => {
       calculator.dataset.firstValue = displayedNum
       calculator.dataset.operator = action
     }
-
-    // using "Array.from(key.parentNode.children", the object will act like an array without returning an actual array
-    // Remove .is-depressed class from all keys
-    Array.from(key.parentNode.children) // "key.parentNode.children", is used to select any button element under the parent element whihch has a class .calculator__keys
-    .forEach(k => k.classList.remove('is-depressed'))
 
     if (action === 'calculate') {
       let firstValue = calculator.dataset.firstValue
@@ -132,11 +127,25 @@ keys.addEventListener('click', e => {
     const clearButton = calculator.querySelector('[data-action=clear]') // "[data-action = clear]" was used to pin point the tags with the 
     clearButton.textContent = 'CE' // this will 
   }
-  if (action === 'clear') { // this was used to reset the 
-    display.textContent = 0
-    key.textContent = 'AC'
+  
+  if (action === 'clear') {
+    if (key.textContent === 'AC') {
+      calculator.dataset.firstValue = ''
+      calculator.dataset.modValue = ''
+      calculator.dataset.operator = ''
+      calculator.dataset.previousKeyType = ''
+    } else {
+      key.textContent = 'AC'
+    }
+    
+  display.textContent = 0
     calculator.dataset.previousKeyType = 'clear'
   }
+
+   // using "Array.from(key.parentNode.children", the object will act like an array without returning an actual array
+    // Remove .is-depressed class from all keys
+    Array.from(key.parentNode.children) // "key.parentNode.children", is used to select any button element under the parent element whihch has a class .calculator__keys
+    .forEach(k => k.classList.remove('is-depressed'))
 
   }
 })
